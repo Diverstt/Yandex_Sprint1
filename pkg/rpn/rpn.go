@@ -1,4 +1,4 @@
-package main
+package rpn
 
 import (
 	"fmt"
@@ -21,7 +21,7 @@ func (s *Stack) Del() (float64, error) {
 	}
 	index := len(*s) - 1
 	value := (*s)[index]
-	*s = append((*s)[:index])
+	*s = (*s)[:index] // Убираем последний элемент
 
 	return value, nil
 }
@@ -39,10 +39,9 @@ func (s *OperatorsStack) Del() (string, error) {
 	if len(*s) == 0 {
 		return "", fmt.Errorf("stack is empty")
 	}
-
 	index := len(*s) - 1
 	value := (*s)[index]
-	*s = append((*s)[:index])
+	*s = (*s)[:index] // Убираем последний элемент
 
 	return value, nil
 }
@@ -67,7 +66,7 @@ func doOperation(a, b float64, operator string) (float64, error) {
 }
 
 // FindMistake проверяет корректность ввода
-func findMistake(str string) error {
+func FindMistake(str string) error {
 	re := regexp.MustCompile(`^[*/+\-]|[*/+\-]$`)
 	matches := re.FindAllString(str, -1)
 	if len(matches) != 0 {
@@ -89,19 +88,9 @@ func findMistake(str string) error {
 	return nil
 }
 
-// IsDigit проверяет, является ли строка числом
-func isDigit(item string) (float64, error) {
-	num, err := strconv.ParseFloat(item, 64)
-	if err != nil {
-		return 0, fmt.Errorf("invalid number: %s", item)
-	}
-
-	return num, nil
-}
-
 // GetTokenAndOperand возвращает список токенов и операндов
 func getTokenAndOperand(str string) ([]string, error) {
-	if err := findMistake(str); err != nil {
+	if err := FindMistake(str); err != nil {
 		return nil, err
 	}
 	re := regexp.MustCompile(`[0-9]+|[*/+\-()]`)
@@ -121,27 +110,25 @@ func checkPriority(operator string) int {
 	}
 }
 
-// processNumber обрабатывает число и добавляет его в стек
-func processNumber(token string, stack *Stack) error {
-	num, err := strconv.ParseFloat(token, 64)
-	if err != nil {
-		return fmt.Errorf("invalid number: %s", token)
-	}
-	stack.Add(num)
-
-	return nil
-}
-
 // processOperator обрабатывает оператор
 func processOperator(token string, stack *Stack, operators *OperatorsStack) error {
 	for len(*operators) > 0 {
-		op, _ := operators.Del()
+		op, err := operators.Del()
+		if err != nil {
+			return err
+		}
 		if op == "(" || checkPriority(token) > checkPriority(op) {
 			operators.Add(op)
 			break
 		}
-		b, _ := stack.Del()
-		a, _ := stack.Del()
+		b, err := stack.Del()
+		if err != nil {
+			return err
+		}
+		a, err := stack.Del()
+		if err != nil {
+			return err
+		}
 		result, err := doOperation(a, b, op)
 		if err != nil {
 			return err
@@ -156,12 +143,21 @@ func processOperator(token string, stack *Stack, operators *OperatorsStack) erro
 // processClosingBracket обрабатывает закрывающую скобку
 func processClosingBracket(stack *Stack, operators *OperatorsStack) error {
 	for len(*operators) > 0 {
-		op, _ := operators.Del()
+		op, err := operators.Del()
+		if err != nil {
+			return err
+		}
 		if op == "(" {
 			break
 		}
-		b, _ := stack.Del()
-		a, _ := stack.Del()
+		b, err := stack.Del()
+		if err != nil {
+			return err
+		}
+		a, err := stack.Del()
+		if err != nil {
+			return err
+		}
 		result, err := doOperation(a, b, op)
 		if err != nil {
 			return err
@@ -207,9 +203,18 @@ func Calc(expression string) (float64, error) {
 	}
 
 	for len(operators) > 0 {
-		op, _ := operators.Del()
-		b, _ := stack.Del()
-		a, _ := stack.Del()
+		op, err := operators.Del()
+		if err != nil {
+			return 0, err
+		}
+		b, err := stack.Del()
+		if err != nil {
+			return 0, err
+		}
+		a, err := stack.Del()
+		if err != nil {
+			return 0, err
+		}
 		result, err := doOperation(a, b, op)
 		if err != nil {
 			return 0, err
@@ -221,7 +226,10 @@ func Calc(expression string) (float64, error) {
 		return 0, fmt.Errorf("invalid expression")
 	}
 
-	result, _ := stack.Del()
+	result, err := stack.Del()
+	if err != nil {
+		return 0, err
+	}
 
 	return result, nil
 }
