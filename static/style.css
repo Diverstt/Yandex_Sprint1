@@ -1,0 +1,85 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, rgba(20, 10, 30, 0.8), rgba(60, 20, 80, 0.8)), url('my-background.jpg'); /* Ваше изображение */
+    background-size: cover; /* Масштабирует изображение, чтобы оно заполняло фон */
+    background-position: center; /* Центрирует изображение */
+    color: white; /* Белый текст на фоне */
+    height: 100vh; /* Занимает всю высоту экрана */
+    display: flex;
+    justify-content: center; /* Центрирует контент по горизонтали */
+    align-items: center; /* Центрирует контент по вертикали */
+}
+
+.container {
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый фон */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень для контейнера */
+    color: #333; /* Темный текст внутри контейнера */
+    text-align: center; /* Центрирует текст и кнопки внутри контейнера */
+}
+
+h1 {
+    text-align: center;
+    color: #8a4baf; /* Фиолетовый заголовок */
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #8a4baf; /* Фиолетовый текст для лейблов */
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    border: 2px solid #8a4baf; /* Фиолетовая рамка */
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.8); /* Полупрозрачный фон */
+    color: #333;
+    font-size: 16px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #8a4baf; /* Более светлый фиолетовый при фокусе */
+}
+
+.form-group button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #5a2e80, #8a4baf); /* Градиент кнопки */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.form-group button:hover {
+    background: linear-gradient(135deg, #8a4baf, #5a2e80); /* Обратный градиент при наведении */
+}
+
+.response {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(90, 46, 128, 0.1); /* Полупрозрачный фиолетовый фон */
+    border: 1px solid #5a2e80;
+    border-radius: 6px;
+    color: #5a2e80; /* Фиолетовый текст */
+    text-align: center;
+    font-weight: bold;
+}
