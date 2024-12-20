@@ -13,12 +13,12 @@ type CalcService struct{}
 func (c *CalcService) Calculate(expression string) (float64, error) {
 	err := rpn.FindMistake(expression)
 	if err != nil {
-		return 0, fmt.Errorf("invalid expression: %w", err)
+		return 0, fmt.Errorf("expression is not valid")
 	}
 
 	result, err := rpn.Calc(expression)
 	if err != nil {
-		return 0, fmt.Errorf("calculation error: %w", err)
+		return 0, fmt.Errorf("internal server error")
 	}
 
 	return result, nil

@@ -21,7 +21,7 @@ func (s *Stack) Del() (float64, error) {
 	}
 	index := len(*s) - 1
 	value := (*s)[index]
-	*s = (*s)[:index] // Убираем последний элемент
+	*s = (*s)[:index]
 
 	return value, nil
 }
@@ -41,7 +41,7 @@ func (s *OperatorsStack) Del() (string, error) {
 	}
 	index := len(*s) - 1
 	value := (*s)[index]
-	*s = (*s)[:index] // Убираем последний элемент
+	*s = (*s)[:index]
 
 	return value, nil
 }
@@ -79,6 +79,18 @@ func FindMistake(str string) error {
 		return fmt.Errorf("false input format")
 	}
 
+	re = regexp.MustCompile(`[а-яА-Яa-zA-Z]`)
+	matches = re.FindAllString(str, -1)
+	if len(matches) != 0 {
+		return fmt.Errorf("false input format")
+	}
+
+	re = regexp.MustCompile(`[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\?~]`)
+	matches = re.FindAllString(str, -1)
+	if len(matches) != 0 {
+		return fmt.Errorf("false input format")
+	}
+
 	re = regexp.MustCompile(`[()]`)
 	matches = re.FindAllString(str, -1)
 	if len(matches)%2 != 0 {
@@ -90,7 +102,8 @@ func FindMistake(str string) error {
 
 // GetTokenAndOperand возвращает список токенов и операндов
 func getTokenAndOperand(str string) ([]string, error) {
-	if err := FindMistake(str); err != nil {
+	err := FindMistake(str)
+	if err != nil {
 		return nil, err
 	}
 	re := regexp.MustCompile(`[0-9]+|[*/+\-()]`)
