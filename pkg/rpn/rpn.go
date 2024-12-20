@@ -86,8 +86,7 @@ func FindMistake(str string) error {
 	}
 
 	re = regexp.MustCompile(`[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\?~]`)
-	matches = re.FindAllString(str, -1)
-	if len(matches) != 0 {
+	if re.MatchString(str) {
 		return fmt.Errorf("false input format")
 	}
 
